@@ -25,7 +25,7 @@ const createUser = async (req, res) => {
   }
 };
 
-const Get_User_By_id = async (req, res) => {  
+const Get_UserBy_id = async (req, res) => {  
   try {
     const { id } = req.params;
 
@@ -55,7 +55,43 @@ const Get_User_By_id = async (req, res) => {
   }
 };
 
-//Create one more api to see the balance by direct UserId > Its a relation 1:1
-// Id, Name, Balance
+const Get_User_BalanceBy_Id = async (req, res) => {
+try {
 
-module.exports = {Get_AllUser, createUser, Get_User_By_id};
+  const { id } = req.body;
+
+  if (!id) {
+    return res.status(400).json({ error: "User ID is required" });
+  };
+
+  const userId = parseInt(id);
+
+  if (isNaN(userId)) {
+    return res.status(400).json({ error: "Invalid User ID" });
+  };
+
+  const users = await prisma.user.findUnique({
+      where : {id : userId}, 
+      select: {
+        id: true,
+        name: true,
+        account : {
+          select : {
+            balance : true
+          }
+        }
+      },
+  });
+      
+  if (!users) {
+    return res.status(404).json({ error: "User not found" });
+  };
+
+  return res.status(200).json(users);
+
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ error: error.message });
+}};
+
+module.exports = {Get_AllUser, createUser, Get_User_By_id, Get_User_Balance};
