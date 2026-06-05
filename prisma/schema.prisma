@@ -32,6 +32,8 @@ model Transactions_Records {
   status        String
   createdAt     DateTime @default(now())
 
-  fromAccount Account @relation("FromAccount",fields: [fromAccountId],references: [id])
-  toAccount Account @relation("ToAccount",fields: [toAccountId],references: [id])
+  fromAccount Account @relation("FromAccount",fields: [fromAccountId], references: [userId])
+  toAccount Account @relation("ToAccount",fields: [toAccountId],references: [userId])
 }
+
+//I want userId as FK, not Id of Account table! <- Problem!

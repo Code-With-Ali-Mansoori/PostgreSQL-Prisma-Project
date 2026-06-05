@@ -94,4 +94,4 @@ try {
   res.status(500).json({ error: error.message });
 }};
 
-module.exports = {Get_AllUser, createUser, Get_User_By_id, Get_User_Balance};
+module.exports = {Get_AllUser, createUser, Get_UserBy_id, Get_User_BalanceBy_Id};
